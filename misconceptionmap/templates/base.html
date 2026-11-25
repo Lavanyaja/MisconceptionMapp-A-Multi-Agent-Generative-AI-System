@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Portal{% endblock %} · MisconceptionMap University Portal</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+<header class="top"><div class="brand"><span class="crest">MM</span><div><b>Unified University Portal</b><small>MisconceptionMap · Learning Intelligence</small></div></div>
+{% if S.uid %}<div class="user"><span class="chip">{{ S.role|upper }}</span> {{ S.name }} <small>({{ S.reg }})</small>
+<form method="post" action="{{ url_for('logout') }}" style="display:inline"><input type="hidden" name="_t" value="{{ token() }}"><button class="link">Logout</button></form></div>{% endif %}</header>
+{% if S.uid %}<div class="shell"><nav class="side">
+<a href="{{ url_for('dashboard') }}">🏠 Home</a>
+{% if S.role=='student' %}<a href="{{ url_for('tutor') }}">🎓 Socratic Tutor</a><a href="{{ url_for('graph') }}">🕸 Concept Map</a>{% endif %}
+{% if S.role in ('faculty','admin') %}<a href="{{ url_for('analytics') }}">📊 Misconception Analytics</a><a href="{{ url_for('graph') }}">🕸 Misconception Graph</a><a href="{{ url_for('materials') }}">📚 Course Materials</a>{% endif %}
+{% if S.role=='admin' %}<a href="{{ url_for('admin') }}">⚙ Administration</a>{% endif %}
+<div class="course"><b>{{ COURSE.code }}</b><br>{{ COURSE.name }}<br><small>{{ COURSE.term }}</small></div></nav><main>{% else %}<main class="solo">{% endif %}
+{% for c,m in get_flashed_messages(with_categories=true) %}<div class="flash {{ c }}">{{ m }}</div>{% endfor %}
+{% block body %}{% endblock %}</main>{% if S.uid %}</div>{% endif %}
+<footer>MisconceptionMap · RTD Open Elective · Lavanya J · SCA25MCA110 · Prototype for academic use</footer>
+</body></html>

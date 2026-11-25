@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block title %}Concept Graph{% endblock %}{% block body %}
+<h1>{{ 'Concept Prerequisite Map' if S.role=='student' else 'Misconception Graph' }}</h1>
+<p class="muted">Arrows point from prerequisite to dependent concept.{% if S.role!='student' %} Darker nodes = more students confused (distinct students).{% endif %}</p>
+<div class="card" style="overflow:auto"><svg id="g" width="760" height="360" viewBox="0 0 760 360"></svg></div>
+<script>
+const C={{ concepts|tojson }},E={{ edges|tojson }},H={{ heat|tojson }};
+const pos={c1:[90,60],c2:[90,180],c3:[90,300],c6:[300,60],c4:[300,180],c5:[500,180],c7:[670,240],c8:[500,60]};
+const mx=Math.max(1,...Object.values(H));const svg=document.getElementById('g');
+let h='<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#64748b"/></marker></defs>';
+E.forEach(([a,b])=>{const[p,q]=[pos[a],pos[b]];h+=`<line x1="${p[0]+60}" y1="${p[1]}" x2="${q[0]-60}" y2="${q[1]}" stroke="#64748b" stroke-width="1.5" marker-end="url(#a)"/>`});
+C.forEach(c=>{const p=pos[c.id],t=H[c.id]/mx;const fill=`rgba(185,28,28,${0.12+0.75*t})`;
+h+=`<rect x="${p[0]-60}" y="${p[1]-24}" width="120" height="48" rx="10" fill="${fill}" stroke="#7f1d1d"/><text x="${p[0]}" y="${p[1]-3}" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2937">${c.name.length>18?c.name.slice(0,17)+'…':c.name}</text><text x="${p[0]}" y="${p[1]+14}" text-anchor="middle" font-size="11" fill="#475569">${c.lecture}${H[c.id]?' · '+H[c.id]+' students':''}</text>`});
+svg.innerHTML=h;
+</script>{% endblock %}

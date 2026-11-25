@@ -1,0 +1,13 @@
+{% extends 'base.html' %}{% block title %}Socratic Tutor{% endblock %}{% block body %}
+<h1>Socratic Tutor</h1><p class="muted">Explain a concept from the course in your own words. The tutor asks guiding questions and cites your lecture slides - it will not just give the answer.</p>
+<div class="card chat">{% for c in chat %}
+<div class="bubble you">{{ c.you }}</div>
+<div class="bubble bot">{% for line in c.bot.text.split('\n') %}<p>{{ line }}</p>{% endfor %}
+{% if c.bot.citations %}<div class="cites">Sources: {% for x in c.bot.citations %}<span class="chip">{{ x.src }}</span>{% endfor %}</div>{% endif %}
+<div class="meta">{% if c.mid %}Confidence {{ '%.0f'|format(c.conf*100) }}% · {% endif %}Verifier: {{ 'grounded & leak-free' if c.bot.verifier.ok else 'flagged' }}{% if c.bot.root %} · Likely root gap: {{ c.bot.root }}{% endif %}</div></div>
+{% else %}<p class="muted">Try: "Overfitting happens when the model is too simple."</p>{% endfor %}</div>
+<form method="post" class="card"><input type="hidden" name="_t" value="{{ token() }}">
+<label>Your explanation<textarea name="answer" rows="3" required maxlength="1000"></textarea></label>
+<label>Reply language<select name="lang">{% for k,v in LANGS.items() %}<option value="{{ k }}" {{ 'selected' if S.lang==k }}>{{ v }}</option>{% endfor %}</select></label>
+<button class="btn">Send</button></form>
+<form method="post" action="{{ url_for('tutor_reset') }}"><input type="hidden" name="_t" value="{{ token() }}"><button class="link">Clear conversation</button></form>{% endblock %}

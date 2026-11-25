@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}Analytics{% endblock %}{% block body %}
+<h1>Misconception Analytics</h1>
+<p class="muted">Aggregate counts use ε-differential privacy (ε={{ eps }}) and small groups (&lt;3) are suppressed. Student identities are hashed.</p>
+<div class="grid"><div class="card stat"><b>{{ total }}</b><span>Enrolled students</span></div><div class="card stat"><b>{{ out|length }}</b><span>Misconceptions found</span></div><div class="card stat"><b>{{ unsure }}</b><span>"Not sure" cases for review</span></div></div>
+<div class="card"><h2>Top misconceptions</h2>
+{% for o in out %}<div class="mrow"><div><b>{{ o.m.label }}</b><div class="muted">Root cause: {{ o.root }}{% if show_raw %} · raw n={{ o.raw }}{% endif %}</div>
+<div class="rec">💡 {{ o.rec }}</div></div>
+<div class="bar"><i style="width:{{ o.pct or 0 }}%"></i><span>{{ (o.pct ~ '%') if o.pct is not none else '<3' }}</span></div></div>{% else %}<p>No data yet.</p>{% endfor %}</div>
+<a class="btn" href="{{ url_for('export') }}">Export anonymised CSV</a>{% endblock %}

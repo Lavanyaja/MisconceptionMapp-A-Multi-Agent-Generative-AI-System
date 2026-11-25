@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% block title %}Student Home{% endblock %}{% block body %}
+<h1>Welcome, {{ S.name }}</h1>
+<div class="grid"><div class="card stat"><b>{{ rows|length }}</b><span>Recent tutor sessions</span></div>
+<div class="card stat"><b>{{ focus|length }}</b><span>Focus areas found</span></div>
+<div class="card stat"><b>{{ rows|selectattr('mid')|list|length }}</b><span>Misconceptions detected</span></div></div>
+<div class="card"><h2>Your focus areas</h2>{% for m,n in focus %}<div class="row"><b>{{ m.label }}</b><span class="muted">{{ CONCEPTS[m.concept].name }} · seen {{ n }}×</span></div>
+{% else %}<p class="muted">Nothing flagged yet. Open the Socratic Tutor and explain a concept in your own words.</p>{% endfor %}
+<a class="btn" href="{{ url_for('tutor') }}">Open Socratic Tutor</a></div>
+<div class="card"><h2>Recent activity</h2><table><tr><th>Time</th><th>Result</th><th>Confidence</th></tr>
+{% for r in rows %}<tr><td>{{ r.ts }}</td><td>{{ MIS[r.mid].label if r.mid else 'Not sure - sent to course materials' }}</td><td>{{ '%.0f'|format(r.conf*100) }}%</td></tr>{% endfor %}</table></div>{% endblock %}

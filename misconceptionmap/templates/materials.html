@@ -1,0 +1,7 @@
+{% extends 'base.html' %}{% block title %}Materials{% endblock %}{% block body %}
+<h1>Course Materials</h1><p class="muted">Indexed for retrieval-augmented tutoring. Every tutor claim cites one of these sources.</p>
+<form method="post" class="card"><input type="hidden" name="_t" value="{{ token() }}">
+<label>Source label<input name="src" placeholder="L8 slide 3" required></label>
+<label>Concept<select name="concept">{% for k,c in CONCEPTS.items() %}<option value="{{ k }}">{{ c.name }}</option>{% endfor %}</select></label>
+<label>Text<textarea name="text" rows="3" required></textarea></label><button class="btn">Add & index</button></form>
+<div class="card"><table><tr><th>Source</th><th>Concept</th><th>Excerpt</th></tr>{% for c in chunks %}<tr><td>{{ c.src }}</td><td>{{ CONCEPTS[c.concept].name }}</td><td>{{ c.text[:110] }}…</td></tr>{% endfor %}</table></div>{% endblock %}

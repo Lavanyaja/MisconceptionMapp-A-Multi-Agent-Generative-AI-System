@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}Admin{% endblock %}{% block body %}
+<h1>Administration</h1>
+<form method="post" class="card inline"><input type="hidden" name="_t" value="{{ token() }}"><input type="hidden" name="do" value="create">
+<h2>Create user</h2><input name="username" placeholder="username" required><input name="name" placeholder="full name" required><input name="reg" placeholder="reg. no.">
+<input name="password" type="password" placeholder="password" required><select name="role"><option>student</option><option>faculty</option><option>admin</option></select><button class="btn">Create</button></form>
+<div class="card"><h2>Users</h2><table><tr><th>Name</th><th>Username</th><th>Role</th><th>Reg. No</th><th>Status</th><th></th></tr>
+{% for u in users %}<tr><td>{{ u.name }}</td><td>{{ u.username }}</td><td><span class="chip">{{ u.role }}</span></td><td>{{ u.reg_no }}</td><td>{{ 'Active' if u.active else 'Disabled' }}</td>
+<td><form method="post"><input type="hidden" name="_t" value="{{ token() }}"><input type="hidden" name="do" value="toggle"><input type="hidden" name="id" value="{{ u.id }}"><button class="link">{{ 'Disable' if u.active else 'Enable' }}</button></form></td></tr>{% endfor %}</table></div>
+<div class="card"><h2>Audit log</h2><table>{% for a in audit %}<tr><td>{{ a.ts }}</td><td>{{ a.actor }}</td><td>{{ a.action }}</td></tr>{% endfor %}</table></div>{% endblock %}

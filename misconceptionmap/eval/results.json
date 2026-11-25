@@ -1,0 +1,26 @@
+[
+  {
+    "mode": "keyword",
+    "precision": 1.0,
+    "recall": 0.825,
+    "f1": 0.904,
+    "accuracy": 0.848,
+    "n": 46
+  },
+  {
+    "mode": "tfidf",
+    "precision": 0.886,
+    "recall": 0.975,
+    "f1": 0.929,
+    "accuracy": 0.87,
+    "n": 46
+  },
+  {
+    "mode": "hybrid",
+    "precision": 0.95,
+    "recall": 0.95,
+    "f1": 0.95,
+    "accuracy": 0.913,
+    "n": 46
+  }
+]
